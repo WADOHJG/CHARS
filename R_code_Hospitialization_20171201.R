@@ -130,12 +130,19 @@ for (i in 1:length(year)) {
     res1$label2 <- res1$label
     res1$label2[res1$category %in% 177:196] <- 'Pregnancy, childbirth'
     res1$label2[res1$category %in% 218:224] <- 'Newborns, neonates'
-    res1$label2[res1$category %in% 49:50] <- 'Diabetes'
     res.final <- data.frame(res1 %>% group_by (label2) %>% summarize(Primary_diagnosis=sum(Primary_diagnosis),
                                                                      First_nine_diagnoses=sum(First_nine_diagnoses),
                                                                      All_25_diagnoses=sum(All_25_diagnoses)))
     xlsx::write.xlsx(res.final, file=paste0('V:/Staff/JXG4303/CHARS/results/reports/All WA residents only/causes_hospitalization_', year[i], '-', 
-                                            type[j],'.xlsx'), row.names=F, sheetName = 'ccs_comb_preg_newborn_diabetes', append=T)
+                                            type[j],'.xlsx'), row.names=F, sheetName = 'ccs_comb_preg_newborn', append=T)
+    
+    res1$label3 <- res1$label2
+    res1$label3[res1$category %in% 49:50] <- 'Diabetes'
+    res.final2 <- data.frame(res1 %>% group_by (label3) %>% summarize(Primary_diagnosis=sum(Primary_diagnosis),
+                                                                      First_nine_diagnoses=sum(First_nine_diagnoses),
+                                                                      All_25_diagnoses=sum(All_25_diagnoses)))
+    xlsx::write.xlsx(res.final2, file=paste0('V:/Staff/JXG4303/CHARS/results/reports/All WA residents only/causes_hospitalization_', year[i], '-', 
+                                             type[j],'.xlsx'), row.names=F, sheetName = 'ccs_comb_preg_newborn_diabetes', append=T)
     
     ###########MEPS-CCS#######################################################################
     res <- matrix(NA, dim(meps)[1], 3, dimnames=list(c(meps$Condition.Category), c('Primary_diagnosis', 'First_nine_diagnoses', 'All_25_diagnoses')))
@@ -167,7 +174,7 @@ countyname$no <- 1:39
 
 ach <- unique(countyname$ACH)
 
-for (i in 1:length(ach)) {dir.create(paste0('V:/Staff/JXG4303/CHARS/results/reports/ACH/', ach[i]))}
+#for (i in 1:length(ach)) {dir.create(paste0('V:/Staff/JXG4303/CHARS/results/reports/ACH/', ach[i]))}
 for (i in 1:length(year)) {
   for (j in 1:length(type)) {
     if (type[j]=='hospitalization') {dat <- read.csv(paste0('V:/Staff/JXG4303/CHARS/results/CHARS_CCS_', year[i], '_hospitalization.csv'), stringsAsFactors=F)}
@@ -212,12 +219,19 @@ for (i in 1:length(year)) {
         res1$label2 <- res1$label
         res1$label2[res1$category %in% 177:196] <- 'Pregnancy, childbirth'
         res1$label2[res1$category %in% 218:224] <- 'Newborns, neonates'
-        res1$label2[res1$category %in% 49:50] <- 'Diabetes'
         res.final <- data.frame(res1 %>% group_by (label2) %>% summarize(Primary_diagnosis=sum(Primary_diagnosis),
                                                                          First_nine_diagnoses=sum(First_nine_diagnoses),
                                                                          All_25_diagnoses=sum(All_25_diagnoses)))
         xlsx::write.xlsx(res.final, file=paste0('V:/Staff/JXG4303/CHARS/results/reports/ACH/', ach[m], '/causes_hospitalization_', year[i], '-', 
-                                                type[j], '_', ach.county[w],'.xlsx'), row.names=F, sheetName = 'ccs_comb_preg_newborn_diabetes', append=T)
+                                                type[j], '_', ach.county[w],'.xlsx'), row.names=F, sheetName = 'ccs_comb_preg_newborn', append=T)
+        
+        res1$label3 <- res1$label2
+        res1$label3[res1$category %in% 49:50] <- 'Diabetes'
+        res.final2 <- data.frame(res1 %>% group_by (label3) %>% summarize(Primary_diagnosis=sum(Primary_diagnosis),
+                                                                          First_nine_diagnoses=sum(First_nine_diagnoses),
+                                                                          All_25_diagnoses=sum(All_25_diagnoses)))
+        xlsx::write.xlsx(res.final2, file=paste0('V:/Staff/JXG4303/CHARS/results/reports/ACH/', ach[m], '/causes_hospitalization_', year[i], '-', 
+                                                 type[j], '_', ach.county[w],'.xlsx'), row.names=F, sheetName = 'ccs_comb_preg_newborn_diabetes', append=T)
         
         ###########MEPS-CCS#######################################################################
         res <- matrix(NA, dim(meps)[1], 3, dimnames=list(c(meps$Condition.Category), c('Primary_diagnosis', 'First_nine_diagnoses', 'All_25_diagnoses')))
