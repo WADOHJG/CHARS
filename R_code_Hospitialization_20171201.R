@@ -257,12 +257,19 @@ for (i in 1:length(year)) {
 #################################
 ##format the ACH/County results##
 #################################
-for (i in 1:length(ach)) {dir.create(paste0('V:/Staff/JXG4303/CHARS/results/reports/sent/', ach[i]))}
+#for (i in 1:length(ach)) {dir.create(paste0('V:/Staff/JXG4303/CHARS/results/reports/sent/', ach[i]))}
 
+year=2016:2014
 type='both'
-diag <- c('Primary_diagnosis',	'First_nine_diagnoses',	'All_25_diagnoses')
+diag <- c('Primary_diagnosis',	'All_25_diagnoses')  #drop 'First_nine_diagnoses' due to the results similar to 'All_25_diagnoses'
 
-for (u in 1:3) {
+#ACH, County
+countyname <- read.csv('V:/Staff/JXG4303/county_code_ACH_2017.csv', stringsAsFactors = F)[-1,]
+countyname$no <- 1:39
+
+ach <- unique(countyname$ACH)
+
+for (u in 1:length(diag)) {
   
   for (m in 1:length(ach)) {
     
@@ -278,11 +285,11 @@ for (u in 1:3) {
         ccso <- dplyr::filter(ccso, category!=259)   ##"Residual codes; unclassified"
         
         ccsc <- xlsx::read.xlsx(file=paste0('V:/Staff/JXG4303/CHARS/results/reports/ACH/', ach[m], '/causes_hospitalization_', year[i], '-', 
-                                            type, '_', ach.county[w],'.xlsx'), sheetIndex = 2)
+                                            type, '_', ach.county[w],'.xlsx'), sheetName = 'ccs_comb_preg_newborn')
         ccsc <- dplyr::filter(ccsc, label2!="Residual codes; unclassified")
         
         meps <- xlsx::read.xlsx(file=paste0('V:/Staff/JXG4303/CHARS/results/reports/ACH/', ach[m], '/causes_hospitalization_', year[i], '-', 
-                                            type, '_', ach.county[w],'.xlsx'), sheetIndex = 3)
+                                            type, '_', ach.county[w],'.xlsx'), sheetName = "MEPS_ccs")
         meps <- meps[meps[,1]!='Residual codes',]
         
         if (i==1) {dato=data.frame(Diagnosis=ccso[,1], CCS_category=ccso[,2])
@@ -296,17 +303,17 @@ for (u in 1:3) {
         tmpo <- data.frame(ccso[, diag[u]], ro)
         names(tmpo) <- c(paste0('N_of_Stays_on_', diag[u], '_', year[i]), paste0('Rank_', year[i]))
         dato <- cbind(dato, tmpo)
-        if (i==length(year)) {dato=dato[order(ccso[, diag[u]], decreasing=T),]}
+        if (i==length(year)) {dato=dato[order(dato[, paste0('N_of_Stays_on_', diag[u], '_', year[1])], decreasing=T),]}
         
         tmpc <- data.frame(ccsc[, diag[u]], rc)
         names(tmpc) <- c(paste0('N_of_Stays_on_', diag[u], '_', year[i]), paste0('Rank_', year[i]))
         datc <- cbind(datc, tmpc)
-        if (i==length(year)) {datc=datc[order(ccsc[, diag[u]], decreasing=T),]}
+        if (i==length(year)) {datc=datc[order(datc[, paste0('N_of_Stays_on_', diag[u], '_', year[1])], decreasing=T),]}
         
         tmpm <- data.frame(meps[, diag[u]], rm)
         names(tmpm) <- c(paste0('N_of_Stays_on_', diag[u], '_', year[i]), paste0('Rank_', year[i]))
         datm <- cbind(datm, tmpm)
-        if (i==length(year)) {datm=datm[order(meps[, diag[u]], decreasing=T),]}
+        if (i==length(year)) {datm=datm[order(datm[, paste0('N_of_Stays_on_', diag[u], '_', year[1])], decreasing=T),]}
       }
       
       if (w==1) {
