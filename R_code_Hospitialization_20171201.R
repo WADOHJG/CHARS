@@ -72,9 +72,7 @@ write.csv(hcup_chars.obs, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS
 
 ###########################################################################################
 ###########################################################################################
-
-year=2014:2016
-type <- c('hospitalization', 'observation', 'both')
+## label creating ##
 
 lb <- read.csv('V:/Staff/JXG4303/CHARS/CCS_HCUP/CCS_ICD9/Single_Level_CCS_2015/dxlabel 2015.csv', skip=4, header=F, stringsAsFactors = F)
 names(lb) <- c('category', 'label')
@@ -91,6 +89,10 @@ for (i in 1:dim(meps)[1]) {
   lb$meps[lb$category %in% eval(parse(text=paste0('c(', noquote(meps$v1[i]),')')))] <- meps$Condition.Category[i]
 }
 lb$meps[is.na(lb$meps)==1] <- 'External causes of injury and poisoning'   #########################
+
+###########################################################################################
+year=2014:2016
+type <- c('hospitalization', 'observation', 'both')
 
 #state  
 for (i in 1:length(year)) {
