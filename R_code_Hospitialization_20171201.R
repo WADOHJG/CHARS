@@ -85,11 +85,11 @@ lb$category2 <- lb$category
 lb$category2[lb$category %in% 177:196] <- '177-196'
 lb$category2[lb$category %in% 218:224] <- '218-224'
 
-meps <- xlsx::read.xlsx('V:/Staff/JXG4303/CHARS/CCS_HCUP/CCS_grouping_MEPS_AHRQ_2007.xlsx', sheetIndex = 1, stringsAsFactors=FALSE)
-meps$v1 <- sub(' - ', ':', meps$CCS.Codes)
+lb_meps <- xlsx::read.xlsx('V:/Staff/JXG4303/CHARS/CCS_HCUP/CCS_grouping_MEPS_AHRQ_2007.xlsx', sheetIndex = 1, stringsAsFactors=FALSE)
+lb_meps$v1 <- sub(' - ', ':', lb_meps$CCS.Codes)
 lb$meps <- NA
-for (i in 1:dim(meps)[1]) {
-  lb$meps[lb$category %in% eval(parse(text=paste0('c(', noquote(meps$v1[i]),')')))] <- meps$Condition.Category[i]
+for (i in 1:dim(lb_meps)[1]) {
+  lb$meps[lb$category %in% eval(parse(text=paste0('c(', noquote(lb_meps$v1[i]),')')))] <- lb_meps$Condition.Category[i]
 }
 lb$meps[is.na(lb$meps)==1] <- 'External causes of injury and poisoning'   #########################
 
@@ -271,8 +271,6 @@ diag <- c('Primary_diagnosis',	'All_25_diagnoses')  #drop 'First_nine_diagnoses'
 #label for the combined CCS preg & newborn category
 lb_c <- lb %>% select(category2, label2) %>% distinct
 
-
-
 #ACH, County
 countyname <- read.csv('V:/Staff/JXG4303/county_code_ACH_2017.csv', stringsAsFactors = F)[-1,]
 countyname$no <- 1:39
@@ -291,20 +289,22 @@ for (u in 1:length(diag)) {
       
       for (i in 1:length(year)){
         ccso <- xlsx::read.xlsx(file=paste0('V:/Staff/JXG4303/CHARS/results/reports/ACH/', ach[m], '/causes_hospitalization_', year[i], '-', 
-                                            type, '_', ach.county[w], '.xlsx'), sheetIndex = 1)
+                                            type, '_', ach.county[w], '.xlsx'), sheetIndex = 1, stringsAsFactors=F)
         ccso <- dplyr::filter(ccso, category!=259)   ##"Residual codes; unclassified"
         
         ccsc <- xlsx::read.xlsx(file=paste0('V:/Staff/JXG4303/CHARS/results/reports/ACH/', ach[m], '/causes_hospitalization_', year[i], '-', 
-                                            type, '_', ach.county[w],'.xlsx'), sheetName = 'ccs_comb_preg_newborn')
-        ccsc <- dplyr::filter(ccsc, label2!="Residual codes; unclassified")
+                                            type, '_', ach.county[w],'.xlsx'), sheetName = 'ccs_comb_preg_newborn', stringsAsFactors=F)
+        ccsc <- full_join(ccsc, lb_c, by='label2') %>%  filter(label2!="Residual codes; unclassified")
         
         meps <- xlsx::read.xlsx(file=paste0('V:/Staff/JXG4303/CHARS/results/reports/ACH/', ach[m], '/causes_hospitalization_', year[i], '-', 
-                                            type, '_', ach.county[w],'.xlsx'), sheetName = "MEPS_ccs")
+                                            type, '_', ach.county[w],'.xlsx'), sheetName = "MEPS_ccs", stringsAsFactors=F)
+        names(meps)[1] <- 'Condition.Category'
+        meps <- left_join(meps, lb_meps[, 1:2], by='Condition.Category')
         meps <- meps[meps[,1]!='Residual codes',]
         
-        if (i==1) {dato=data.frame(Diagnosis=ccso[,1], CCS_category=ccso[,2])
-        datc=data.frame(Diagnosis=ccsc[,1])
-        datm=data.frame(Diagnosis=meps[,1])}
+        if (i==1) {dato=data.frame(Diagnosis=ccso[,1], CCS_category=ccso[,'category'])
+        datc=data.frame(Diagnosis=ccsc[,1], CCS_category=ccsc[, 'category2'])
+        datm=data.frame(Diagnosis=meps[,1], CCS_category=meps[, 'CCS.Codes'])}
         
         ro <- rank(-1*ccso[,diag[u]], ties.method = 'min')
         rc <- rank(-1*ccsc[,diag[u]], ties.method = 'min')
