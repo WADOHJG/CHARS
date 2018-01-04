@@ -81,6 +81,9 @@ lb$label2[lb$category %in% 177:196] <- 'Pregnancy, childbirth'
 lb$label2[lb$category %in% 218:224] <- 'Newborns, neonates'
 lb$label3 <- lb$label2
 lb$label3[lb$category %in% 49:50] <- 'Diabetes'
+lb$category2 <- lb$category
+lb$category2[lb$category %in% 177:196] <- '177-196'
+lb$category2[lb$category %in% 218:224] <- '218-224'
 
 meps <- xlsx::read.xlsx('V:/Staff/JXG4303/CHARS/CCS_HCUP/CCS_grouping_MEPS_AHRQ_2007.xlsx', sheetIndex = 1, stringsAsFactors=FALSE)
 meps$v1 <- sub(' - ', ':', meps$CCS.Codes)
@@ -264,6 +267,11 @@ for (i in 1:length(year)) {
 year=2016:2014
 type='both'
 diag <- c('Primary_diagnosis',	'All_25_diagnoses')  #drop 'First_nine_diagnoses' due to the results similar to 'All_25_diagnoses'
+
+#label for the combined CCS preg & newborn category
+lb_c <- lb %>% select(category2, label2) %>% distinct
+
+
 
 #ACH, County
 countyname <- read.csv('V:/Staff/JXG4303/county_code_ACH_2017.csv', stringsAsFactors = F)[-1,]
