@@ -12,7 +12,7 @@ year=2015
   icd9$diag <- sub("\\s+$", "", icd9$diag)    #remove trailing whitespace
   icd9$category1 <- as.numeric(gsub("'", "", icd9$category))
   
-  ccs10 <- read.csv('V:/Staff/JXG4303/CHARS/CCS_HCUP/CCS_ICD10/ccs_dx_icd10cm_2017/ccs_dx_icd10cm_2017.csv', stringsAsFactors = F)
+  ccs10 <- read.csv('V:/Staff/JXG4303/CHARS/CCS_HCUP/CCS_ICD10/ccs_201801/ccs_dx_icd10cm_2018_1/ccs_dx_icd10cm_2018_1.csv', stringsAsFactors = F)
   icd10 <- ccs10 %>% 
     select(1:4) %>% 
     rename(icd=X.ICD.10.CM.CODE., category=X.CCS.CATEGORY.,
@@ -82,9 +82,9 @@ for (j in 1:25) {
 
 hcup_chars.inp_impute <- rbind(hcup_chars.inp_9, hcup_chars.inp_10)
 
-write.csv(tab.cnt.inp, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_CCS_', year, '_number_diagnosis_hospitalization.csv'), row.names=F)
-write.csv(hcup_chars.inp_impute, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_CCS_', year, '_hospitalization.csv'), row.names=F)
-#write.table(hcup_chars.inp_impute, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_CCS_', year, '_hospitalization.txt'), row.names=F)
+write.csv(tab.cnt.inp, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_201801CCS_', year, '_number_diagnosis_hospitalization.csv'), row.names=F)
+write.csv(hcup_chars.inp_impute, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_201801CCS_', year, '_hospitalization.csv'), row.names=F)
+write.table(hcup_chars.inp_impute, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_201801CCS_', year, '_hospitalization.txt'), row.names=F)
 
 #############
 #observation#
@@ -121,9 +121,9 @@ for (j in 1:25) {
 
 hcup_chars.obs_final <- rbind(hcup_chars.obs_9, hcup_chars.obs_10)
 
-write.csv(tab.cnt.obs, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_CCS_', year, '_number_diagnosis_observation.csv'), row.names=F)
-write.csv(hcup_chars.obs_final, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_CCS_', year, '_observation.csv'), row.names=F)
-#write.table(hcup_chars.obs_final, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_CCS_', year, '_observation.txt'), row.names=F)
+write.csv(tab.cnt.obs, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_201801CCS_', year, '_number_diagnosis_observation.csv'), row.names=F)
+write.csv(hcup_chars.obs_final, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_201801CCS_', year, '_observation.csv'), row.names=F)
+write.table(hcup_chars.obs_final, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_201801CCS_', year, '_observation.txt'), row.names=F)
 
 
 
