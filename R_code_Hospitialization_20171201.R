@@ -1,5 +1,6 @@
 library(dplyr)
 library(tidyr)
+#rm(list=ls())
 
 ###############################################
 #####transfer ICD9/10 to CCS categories #######
@@ -10,7 +11,7 @@ year=2014; # year=2016
 if (year<2015) {
   ccs <- read.csv('V:/Staff/JXG4303/CHARS/CCS_HCUP/CCS_ICD9/Single_Level_CCS_2015/$dxref 2015.csv', stringsAsFactors = F, skip=1)[-1,]
   icd <- ccs %>% 
-    select(1:4) %>% 
+    dplyr::select(1:4) %>% 
     rename(icd9=X.ICD.9.CM.CODE., category=X.CCS.CATEGORY.,
            desc_hcup=X.CCS.CATEGORY.DESCRIPTION., desc_icd=X.ICD.9.CM.CODE.DESCRIPTION.)
   icd$diag <- gsub("'", "", icd$icd9)
@@ -19,9 +20,9 @@ if (year<2015) {
 }
 
 if (year>2015) {
-  ccs <- read.csv('V:/Staff/JXG4303/CHARS/CCS_HCUP/CCS_ICD10/ccs_dx_icd10cm_2017/ccs_dx_icd10cm_2017.csv', stringsAsFactors = F)
+  ccs <- read.csv('V:/Staff/JXG4303/CHARS/CCS_HCUP/CCS_ICD10/ccs_201801/ccs_dx_icd10cm_2018_1/ccs_dx_icd10cm_2018_1.csv', stringsAsFactors = F)
   icd <- ccs %>% 
-    select(1:4) %>% 
+    dplyr::select(1:4) %>% 
     rename(icd10=X.ICD.10.CM.CODE., category=X.CCS.CATEGORY.,
            desc_hcup=X.CCS.CATEGORY.DESCRIPTION., desc_icd=X.ICD.10.CM.CODE.DESCRIPTION.)
   icd$diag <- gsub("'", "", icd$icd10)
@@ -33,13 +34,13 @@ if (year>2015) {
 #hospitalization
 tmp.inp <- eval(parse(text=paste0("data.frame(haven::read_sas('Y:/Datasets/Restricted/CHARS/CHARS/SAS_REDACTED/chr_r", year, ".sas7bdat'))")))
 tab.cnt.inp <- table(tmp.inp$DIAGCNT)
-hcup_chars.inp<- tmp.inp %>% select(SEQ_NO_ENC, STATERES, COUNTYRES, AGE, SEX, 
+hcup_chars.inp<- tmp.inp %>% dplyr::select(SEQ_NO_ENC, STATERES, COUNTYRES, AGE, SEX, 
                                     HISPANIC, RACE_WHT, RACE_BLK, RACE_AMI, RACE_ASI, RACE_HAW, 
                                     PAYER1, PAYER2, PAYER3)
-tmp.inp1 <- tmp.inp %>% select(SEQ_NO_ENC, contains("DIAG"))
+tmp.inp1 <- tmp.inp %>% dplyr::select(SEQ_NO_ENC, contains("DIAG"))
 
 for (j in 1:25) {
-  a <- eval(parse(text=paste0("select(tmp.inp1, SEQ_NO_ENC, DIAG", j, ") %>% 
+  a <- eval(parse(text=paste0("dplyr::select(tmp.inp1, SEQ_NO_ENC, DIAG", j, ") %>% 
                               left_join(icd[,c('diag', 'category1')], by=c('DIAG", j, "'='diag')) %>% 
                               rename(diag", j, "_ccs=category1)")))
   hcup_chars.inp <- full_join(hcup_chars.inp, a, by='SEQ_NO_ENC')
@@ -49,24 +50,24 @@ for (j in 1:25) {
 #observation
 tmp.obs <- eval(parse(text=paste0("data.frame(haven::read_sas('Y:/Datasets/Restricted/CHARS/CHARS/SAS_REDACTED/Observation/chro_r", year, ".sas7bdat'))")))
 tab.cnt.obs <- table(tmp.obs$DIAGCNT)
-hcup_chars.obs<- tmp.obs %>% select(SEQ_NO_ENC, STATERES, COUNTYRES, AGE, SEX, 
+hcup_chars.obs<- tmp.obs %>% dplyr::select(SEQ_NO_ENC, STATERES, COUNTYRES, AGE, SEX, 
                                     HISPANIC, RACE_WHT, RACE_BLK, RACE_AMI, RACE_ASI, RACE_HAW, 
                                     PAYER1, PAYER2, PAYER3)
-tmp.obs1 <- tmp.obs %>% select(SEQ_NO_ENC, contains("DIAG"))
+tmp.obs1 <- tmp.obs %>% dplyr::select(SEQ_NO_ENC, contains("DIAG"))
 
 for (j in 1:25) {
-  a <- eval(parse(text=paste0("select(tmp.obs1, SEQ_NO_ENC, DIAG", j, ") %>% 
+  a <- eval(parse(text=paste0("dplyr::select(tmp.obs1, SEQ_NO_ENC, DIAG", j, ") %>% 
                               left_join(icd[,c('diag', 'category1')], by=c('DIAG", j, "'='diag')) %>% 
                               rename(diag", j, "_ccs=category1)")))
   hcup_chars.obs <- full_join(hcup_chars.obs, a, by='SEQ_NO_ENC')
 }
 
-write.csv(tab.cnt.inp, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_CCS_', year, '_number_diagnosis_hospitalization.csv'), row.names=F)
-write.csv(hcup_chars.inp, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_CCS_', year, '_hospitalization.csv'), row.names=F)
-#write.table(hcup_chars.inp, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_CCS_', year, '_hospitalization.txt'), row.names=F)
-write.csv(tab.cnt.obs, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_CCS_', year, '_number_diagnosis_observation.csv'), row.names=F)
-write.csv(hcup_chars.obs, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_CCS_', year, '_observation.csv'), row.names=F)
-#write.table(hcup_chars.obs, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_CCS_', year, '_observation.txt'), row.names=F)
+write.csv(tab.cnt.inp, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_201801CCS_', year, '_number_diagnosis_hospitalization.csv'), row.names=F)
+write.csv(hcup_chars.inp, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_201801CCS_', year, '_hospitalization.csv'), row.names=F)
+write.table(hcup_chars.inp, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_201801CCS_', year, '_hospitalization.txt'), row.names=F)
+write.csv(tab.cnt.obs, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_201801CCS_', year, '_number_diagnosis_observation.csv'), row.names=F)
+write.csv(hcup_chars.obs, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_201801CCS_', year, '_observation.csv'), row.names=F)
+write.table(hcup_chars.obs, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_201801CCS_', year, '_observation.txt'), row.names=F)
 
 
 
@@ -95,6 +96,7 @@ lb$meps[is.na(lb$meps)==1] <- 'External causes of injury and poisoning'   ######
 
 ###########################################################################################
 year=2014:2016
+ccs_version <- c('', '201801', '201801')
 type <- c('hospitalization', 'observation', 'both')
 
 #state  
@@ -102,11 +104,11 @@ for (i in 1:length(year)) {
   
   for (j in 1:length(type)) {
     
-    if (type[j]=='hospitalization') {dat <- read.csv(paste0('V:/Staff/JXG4303/CHARS/results/CHARS_CCS_', year[i], '_hospitalization.csv'), stringsAsFactors=F)}
-    if (type[j]=='observation') {dat <- read.csv(paste0('V:/Staff/JXG4303/CHARS/results/CHARS_CCS_', year[i], '_observation.csv'), stringsAsFactors=F)}
+    if (type[j]=='hospitalization') {dat <- read.csv(paste0('V:/Staff/JXG4303/CHARS/results/CHARS_', ccs_version[i], 'CCS_', year[i], '_hospitalization.csv'), stringsAsFactors=F)}
+    if (type[j]=='observation') {dat <- read.csv(paste0('V:/Staff/JXG4303/CHARS/results/CHARS_', ccs_version[i], 'CCS_', year[i], '_observation.csv'), stringsAsFactors=F)}
     if (type[j]=='both') {
-      dat1 <- read.csv(paste0('V:/Staff/JXG4303/CHARS/results/CHARS_CCS_', year[i], '_hospitalization.csv'), stringsAsFactors=F)
-      dat2 <- read.csv(paste0('V:/Staff/JXG4303/CHARS/results/CHARS_CCS_', year[i], '_observation.csv'), stringsAsFactors=F)
+      dat1 <- read.csv(paste0('V:/Staff/JXG4303/CHARS/results/CHARS_', ccs_version[i], 'CCS_', year[i], '_hospitalization.csv'), stringsAsFactors=F)
+      dat2 <- read.csv(paste0('V:/Staff/JXG4303/CHARS/results/CHARS_', ccs_version[i], 'CCS_', year[i], '_observation.csv'), stringsAsFactors=F)
       dat <- rbind(dat1, dat2)
     }
     dat <- filter(dat, STATERES=='WA')   #WA residents only
@@ -150,9 +152,9 @@ for (i in 1:length(year)) {
                                              type[j],'.xlsx'), row.names=F, sheetName = 'ccs_comb_preg_newborn_diabetes', append=T)
     
     ###########MEPS-CCS#######################################################################
-    res <- matrix(NA, dim(meps)[1], 3, dimnames=list(c(meps$Condition.Category), c('Primary_diagnosis', 'First_nine_diagnoses', 'All_25_diagnoses')))
-    for (k in 1:dim(meps)[1]) {
-      cause <- paste0('c(', noquote(meps$v1[k]),')')
+    res <- matrix(NA, dim(lb_meps)[1], 3, dimnames=list(c(lb_meps$Condition.Category), c('Primary_diagnosis', 'First_nine_diagnoses', 'All_25_diagnoses')))
+    for (k in 1:dim(lb_meps)[1]) {
+      cause <- paste0('c(', noquote(lb_meps$v1[k]),')')
       ct <- matrix(NA, dim(dat)[1], 25)
       for (u in 1:25) {
         ct[,u] <- eval(parse(text=paste0('dat$diag', u, '_ccs %in% ', cause)))
@@ -172,6 +174,7 @@ for (i in 1:length(year)) {
 #######################################################################################
 year=2014:2016
 type <- c('hospitalization', 'observation', 'both')
+ccs_version <- c('', '201801', '201801')
 
 #ACH, County
 countyname <- read.csv('V:/Staff/JXG4303/county_code_ACH_2017.csv', stringsAsFactors = F)[-1,]
@@ -182,11 +185,11 @@ ach <- unique(countyname$ACH)
 #for (i in 1:length(ach)) {dir.create(paste0('V:/Staff/JXG4303/CHARS/results/reports/ACH/', ach[i]))}
 for (i in 1:length(year)) {
   for (j in 1:length(type)) {
-    if (type[j]=='hospitalization') {dat <- read.csv(paste0('V:/Staff/JXG4303/CHARS/results/CHARS_CCS_', year[i], '_hospitalization.csv'), stringsAsFactors=F)}
-    if (type[j]=='observation') {dat <- read.csv(paste0('V:/Staff/JXG4303/CHARS/results/CHARS_CCS_', year[i], '_observation.csv'), stringsAsFactors=F)}
+    if (type[j]=='hospitalization') {dat <- read.csv(paste0('V:/Staff/JXG4303/CHARS/results/CHARS_', ccs_version[i], 'CCS_', year[i], '_hospitalization.csv'), stringsAsFactors=F)}
+    if (type[j]=='observation') {dat <- read.csv(paste0('V:/Staff/JXG4303/CHARS/results/CHARS_', ccs_version[i], 'CCS_', year[i], '_observation.csv'), stringsAsFactors=F)}
     if (type[j]=='both') {
-      dat1 <- read.csv(paste0('V:/Staff/JXG4303/CHARS/results/CHARS_CCS_', year[i], '_hospitalization.csv'), stringsAsFactors=F)
-      dat2 <- read.csv(paste0('V:/Staff/JXG4303/CHARS/results/CHARS_CCS_', year[i], '_observation.csv'), stringsAsFactors=F)
+      dat1 <- read.csv(paste0('V:/Staff/JXG4303/CHARS/results/CHARS_', ccs_version[i], 'CCS_', year[i], '_hospitalization.csv'), stringsAsFactors=F)
+      dat2 <- read.csv(paste0('V:/Staff/JXG4303/CHARS/results/CHARS_', ccs_version[i], 'CCS_', year[i], '_observation.csv'), stringsAsFactors=F)
       dat <- rbind(dat1, dat2)
     }
     dat <- dat %>% filter(STATERES=='WA')  %>%  left_join(countyname, by=c('COUNTYRES'='no'))
@@ -239,9 +242,9 @@ for (i in 1:length(year)) {
                                                  type[j], '_', ach.county[w],'.xlsx'), row.names=F, sheetName = 'ccs_comb_preg_newborn_diabetes', append=T)
         
         ###########MEPS-CCS#######################################################################
-        res <- matrix(NA, dim(meps)[1], 3, dimnames=list(c(meps$Condition.Category), c('Primary_diagnosis', 'First_nine_diagnoses', 'All_25_diagnoses')))
-        for (k in 1:dim(meps)[1]) {
-          cause <- paste0('c(', noquote(meps$v1[k]),')')
+        res <- matrix(NA, dim(lb_meps)[1], 3, dimnames=list(c(lb_meps$Condition.Category), c('Primary_diagnosis', 'First_nine_diagnoses', 'All_25_diagnoses')))
+        for (k in 1:dim(lb_meps)[1]) {
+          cause <- paste0('c(', noquote(lb_meps$v1[k]),')')
           ct <- matrix(NA, dim(dat.tmp1)[1], 25)
           for (u in 1:25) {
             ct[,u] <- eval(parse(text=paste0('dat.tmp1$diag', u, '_ccs %in% ', cause)))
@@ -269,7 +272,7 @@ type='both'
 diag <- c('Primary_diagnosis',	'All_25_diagnoses')  #drop 'First_nine_diagnoses' due to the results similar to 'All_25_diagnoses'
 
 #label for the combined CCS preg & newborn category
-lb_c <- lb %>% select(category2, label2) %>% distinct
+lb_c <- lb %>% dplyr::select(category2, label2) %>% distinct
 
 #ACH, County
 countyname <- read.csv('V:/Staff/JXG4303/county_code_ACH_2017.csv', stringsAsFactors = F)[-1,]
@@ -354,7 +357,7 @@ for (u in 1:length(diag)) {
 
 k=5
 
-cause <- paste0('c(', noquote(meps$v1[k]),')')
+cause <- paste0('c(', noquote(lb_meps$v1[k]),')')
 ct <- matrix(NA, dim(dat)[1], 25)
 for (u in 1:25) {
   ct[,u] <- eval(parse(text=paste0('dat$diag', u, '_ccs %in% ', cause)))
