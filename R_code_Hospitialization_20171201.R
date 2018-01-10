@@ -173,7 +173,7 @@ for (i in 1:length(year)) {
 
 #######################################################################################
 year=2014:2016
-type <- c('hospitalization', 'observation', 'both')
+type <- 'both' #c('hospitalization', 'observation', 'both')
 ccs_version <- c('', '201801', '201801')
 
 #ACH, County
