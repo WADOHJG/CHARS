@@ -350,6 +350,63 @@ for (u in 1:length(diag)) {
 
 
 
+#state
+
+for (u in 1:length(diag)) {
+  
+  for (i in 1:length(year)){
+    ccso <- xlsx::read.xlsx(file=paste0('V:/Staff/JXG4303/CHARS/results/reports/All WA residents only/causes_hospitalization_', year[i], '-', 
+                                        type, '.xlsx'), sheetIndex = 1, stringsAsFactors=F)
+    ccso <- dplyr::filter(ccso, category!=259)   ##"Residual codes; unclassified"
+    
+    ccsc <- xlsx::read.xlsx(file=paste0('V:/Staff/JXG4303/CHARS/results/reports/All WA residents only/causes_hospitalization_', year[i], '-', 
+                                        type, '.xlsx'), sheetName = 'ccs_comb_preg_newborn', stringsAsFactors=F)
+    ccsc <- full_join(ccsc, lb_c, by='label2') %>%  filter(label2!="Residual codes; unclassified")
+    
+    meps <- xlsx::read.xlsx(file=paste0('V:/Staff/JXG4303/CHARS/results/reports/All WA residents only/causes_hospitalization_', year[i], '-', 
+                                        type, '.xlsx'), sheetName = "MEPS_ccs", stringsAsFactors=F)
+    names(meps)[1] <- 'Condition.Category'
+    meps <- left_join(meps, lb_meps[, 1:2], by='Condition.Category')
+    meps <- meps[meps[,1]!='Residual codes',]
+    
+    if (i==1) {dato=data.frame(Diagnosis=ccso[,1], CCS_category=ccso[,'category'])
+    datc=data.frame(Diagnosis=ccsc[,1], CCS_category=ccsc[, 'category2'])
+    datm=data.frame(Diagnosis=meps[,1], CCS_category=meps[, 'CCS.Codes'])}
+    
+    ro <- rank(-1*ccso[,diag[u]], ties.method = 'min')
+    rc <- rank(-1*ccsc[,diag[u]], ties.method = 'min')
+    rm <- rank(-1*meps[,diag[u]], ties.method = 'min')
+    
+    tmpo <- data.frame(ccso[, diag[u]], ro)
+    names(tmpo) <- c(paste0('N_of_Stays_on_', diag[u], '_', year[i]), paste0('Rank_', year[i]))
+    dato <- cbind(dato, tmpo)
+    if (i==length(year)) {dato=dato[order(dato[, paste0('N_of_Stays_on_', diag[u], '_', year[1])], decreasing=T),]}
+    
+    tmpc <- data.frame(ccsc[, diag[u]], rc)
+    names(tmpc) <- c(paste0('N_of_Stays_on_', diag[u], '_', year[i]), paste0('Rank_', year[i]))
+    datc <- cbind(datc, tmpc)
+    if (i==length(year)) {datc=datc[order(datc[, paste0('N_of_Stays_on_', diag[u], '_', year[1])], decreasing=T),]}
+    
+    tmpm <- data.frame(meps[, diag[u]], rm)
+    names(tmpm) <- c(paste0('N_of_Stays_on_', diag[u], '_', year[i]), paste0('Rank_', year[i]))
+    datm <- cbind(datm, tmpm)
+    if (i==length(year)) {datm=datm[order(datm[, paste0('N_of_Stays_on_', diag[u], '_', year[1])], decreasing=T),]}
+  }
+  
+
+    xlsx::write.xlsx(dato, file=paste0('V:/Staff/JXG4303/CHARS/results/reports/sent/WA/hospitalization_State_', diag[u], '_ccs.xlsx'),
+                     row.names=F, sheetName='State')
+    xlsx::write.xlsx(datc, file=paste0('V:/Staff/JXG4303/CHARS/results/reports/sent/WA/hospitalization_State_', diag[u], '_ccs_comb.xlsx'),
+                     row.names=F, sheetName="State")
+    xlsx::write.xlsx(datm, file=paste0('V:/Staff/JXG4303/CHARS/results/reports/sent/WA/hospitalization_State_', diag[u], '_MEPS.xlsx'),
+                     row.names=F, sheetName="State")
+
+}  
+  
+  
+
+
+
 #############################################################################################
 ##check the primary diagnosis distribution among patients with non-primary diabetes diagnosis (i.e. in diagnosis 2-25) 
 
