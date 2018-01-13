@@ -7,16 +7,18 @@ output: word_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Data Source
+The Comprehensive Hospital Abstract Reporting System (CHARS) is a Department of Health (DOH) system which collects record level information on inpatient and observation patient community hospital stays. For more details on CHARS see the DOH CHARS information page [[link](https://www.doh.wa.gov/DataandStatisticalReports/HealthcareinWashington/HospitalandPatientData/HospitalDischargeDataCHARS)].
 
-The Comprehensive Hospital Abstract Reporting System (CHARS) is a Department of Health system which collects record level information on inpatient and observation patient community hospital stays. 
-
-
-
-
+## Ranking of Diagnoses of Hospital Stays
+Two types of ranking were provided: one is based on principal diagnosis that is the condition established after study to be chiefly responsible for occasioning the admission of the patient for care; another is based on  principal diagnosis as well as other diagnosis conditions that coexist at the time of admission, that develop subsequently, or that affect the treatment received and/or the length of stay (up to 24 diagnoses)
 
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Inpatient Stays
+The unit of analysis in the NIS is the hospital discharge (i.e., the inpatient stay), not a person or patient. This means that a person who is admitted to the hospital multiple times in one year will be counted each time as a separate "discharge" from the hospital. Counts are summarized by discharge year. There were no exclusions applied to the data
+
+
+
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
