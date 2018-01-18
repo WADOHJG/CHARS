@@ -293,11 +293,11 @@ for (u in 1:length(diag)) {
       for (i in 1:length(year)){
         ccso <- xlsx::read.xlsx(file=paste0('V:/Staff/JXG4303/CHARS/results/reports/ACH/', ach[m], '/causes_hospitalization_', year[i], '-', 
                                             type, '_', ach.county[w], '.xlsx'), sheetIndex = 1, stringsAsFactors=F)
-        ccso <- dplyr::filter(ccso, category!=259)   ##"Residual codes; unclassified"
+        ccso <- dplyr::filter(ccso, !(category %in% c(259, 260, 2601:2621)))   ##"Residual codes; unclassified" and E codes (259, 260, 2601:2621)
         
         ccsc <- xlsx::read.xlsx(file=paste0('V:/Staff/JXG4303/CHARS/results/reports/ACH/', ach[m], '/causes_hospitalization_', year[i], '-', 
                                             type, '_', ach.county[w],'.xlsx'), sheetName = 'ccs_comb_preg_newborn', stringsAsFactors=F)
-        ccsc <- full_join(ccsc, lb_c, by='label2') %>%  filter(label2!="Residual codes; unclassified")
+        ccsc <- full_join(ccsc, lb_c, by='label2') %>%  filter(!(category2 %in% as.character(c(259, 260, 2601:2621))))
         
         meps <- xlsx::read.xlsx(file=paste0('V:/Staff/JXG4303/CHARS/results/reports/ACH/', ach[m], '/causes_hospitalization_', year[i], '-', 
                                             type, '_', ach.county[w],'.xlsx'), sheetName = "MEPS_ccs", stringsAsFactors=F)
@@ -357,11 +357,11 @@ for (u in 1:length(diag)) {
   for (i in 1:length(year)){
     ccso <- xlsx::read.xlsx(file=paste0('V:/Staff/JXG4303/CHARS/results/reports/All WA residents only/causes_hospitalization_', year[i], '-', 
                                         type, '.xlsx'), sheetIndex = 1, stringsAsFactors=F)
-    ccso <- dplyr::filter(ccso, category!=259)   ##"Residual codes; unclassified"
+    ccso <- dplyr::filter(ccso, !(category %in% c(259, 260, 2601:2621)))   ##"Residual codes; unclassified" and E codes (259, 260, 2601:2621)
     
     ccsc <- xlsx::read.xlsx(file=paste0('V:/Staff/JXG4303/CHARS/results/reports/All WA residents only/causes_hospitalization_', year[i], '-', 
                                         type, '.xlsx'), sheetName = 'ccs_comb_preg_newborn', stringsAsFactors=F)
-    ccsc <- full_join(ccsc, lb_c, by='label2') %>%  filter(label2!="Residual codes; unclassified")
+    ccsc <- full_join(ccsc, lb_c, by='label2') %>%  filter(!(category2 %in% as.character(c(259, 260, 2601:2621))))
     
     meps <- xlsx::read.xlsx(file=paste0('V:/Staff/JXG4303/CHARS/results/reports/All WA residents only/causes_hospitalization_', year[i], '-', 
                                         type, '.xlsx'), sheetName = "MEPS_ccs", stringsAsFactors=F)
