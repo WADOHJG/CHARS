@@ -13,9 +13,23 @@ The Comprehensive Hospital Abstract Reporting System (CHARS) is a Department of 
 ## Ranking of Diagnoses of Hospital Stays
 Two types of ranking were provided: one is based on principal diagnosis that is the condition established after study to be chiefly responsible for occasioning the admission of the patient for care; another is based on  principal diagnosis as well as other diagnosis conditions that coexist at the time of admission, that develop subsequently, or that affect the treatment received and/or the length of stay (up to 24 diagnoses)
 
+## Hospital Stays
+The unit of analysis is the hospital discharge (i.e., the inpatient stay), not a person or patient. This means that a person who is admitted to the hospital multiple times in one year will be counted each time as a separate "discharge" from the hospital. Counts are summarized by discharge year. 
 
-Inpatient Stays
-The unit of analysis in the NIS is the hospital discharge (i.e., the inpatient stay), not a person or patient. This means that a person who is admitted to the hospital multiple times in one year will be counted each time as a separate "discharge" from the hospital. Counts are summarized by discharge year. There were no exclusions applied to the data
+##comparability across years
+Every effort was made to translate the CCS system to ICD-10-CM/PCS without making changes to the CCS assignments for diseases and conditions. However, because of the structure and greater specificity of ICD-10-CM there are some ICD-9-CM conditions that do not map to the same CCS in ICD-10-CM. For example; ICD-9-CM code 721.8, Other allied disorders of spine, is assigned to CCS 205, Spondylosis; intervertebral disc disorders; other back problems. The GEMs map this ICD-9-CM code to two ICD-10-CM codes. 
+
+M25.78, Osteophyte, vertebrae, assigned to CCS 212, Other bone disease and musculoskeletal deformities
+M48.9, Spondylopathy, unspecified, assigned to CCS 205, Spondylosis; intervertebral disc disorders; other back problems
+
+Even though the code description for M48.9 is more specific than the ICD-9-CM code 721.8, the CCS assignment to CCS 205 was preserved. However, code M25.78 is much more specific than 721.8 and resulted in a different CCS assignment, CCS 212, because osteophyte did not fit into CCS 205. Therefore, when users of the system are comparing ICD-9-CM to ICD-10-CM, it is important to remember that one ICD-9-CM code may map to multiple ICD-10-CM codes, of which some may be closer matches to the ICD-9-CM code/description than others. 
+
+## E code
+In ICD-10-CM, the E codes have moved to Chapter 20: External Causes of Morbidity (V01-Y99). The external cause codes are used essentially the same in ICD-10-CM as they are in ICD-9-CM, with a few modifications
+No external cause code from ICD-10-CM Chapter 20 is needed if the external cause and intent are included in a code from another chapter, such as T42.3X1A, Poisoning by barbituates, accidental, intentional, initial encounter. This is a new guideline for ICD-10-CM.
+
+ICD9: Supplemental Classification of External Causes of Injury and Poisoning (E-codes, E800-E999),     E code can never be a principal diagnosis
+ICD10: Chapter 20: External Causes of Morbidity (V00-Y99) The external causes of morbidity, codes should never be sequenced as the first-listed or principal diagnosis.
 
 
 
