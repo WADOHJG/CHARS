@@ -62,12 +62,14 @@ for (j in 1:25) {
   hcup_chars.obs <- full_join(hcup_chars.obs, a, by='SEQ_NO_ENC')
 }
 
-write.csv(tab.cnt.inp, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_201801CCS_', year, '_number_diagnosis_hospitalization.csv'), row.names=F)
-write.csv(hcup_chars.inp, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_201801CCS_', year, '_hospitalization.csv'), row.names=F)
-write.table(hcup_chars.inp, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_201801CCS_', year, '_hospitalization.txt'), row.names=F)
-write.csv(tab.cnt.obs, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_201801CCS_', year, '_number_diagnosis_observation.csv'), row.names=F)
-write.csv(hcup_chars.obs, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_201801CCS_', year, '_observation.csv'), row.names=F)
-write.table(hcup_chars.obs, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_201801CCS_', year, '_observation.txt'), row.names=F)
+if (year<2015) {v=''} else {v='201801'}
+
+write.csv(tab.cnt.inp, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_', v, 'CCS_', year, '_number_diagnosis_hospitalization.csv'), row.names=F)
+write.csv(hcup_chars.inp, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_', v, 'CCS_', year, '_hospitalization.csv'), row.names=F)
+write.table(hcup_chars.inp, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_', v, 'CCS_', year, '_hospitalization.txt'), row.names=F)
+write.csv(tab.cnt.obs, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_', v, 'CCS_', year, '_number_diagnosis_observation.csv'), row.names=F)
+write.csv(hcup_chars.obs, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_', v, 'CCS_', year, '_observation.csv'), row.names=F)
+write.table(hcup_chars.obs, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHARS_', v, 'CCS_', year, '_observation.txt'), row.names=F)
 
 
 
@@ -78,12 +80,12 @@ write.table(hcup_chars.obs, file=paste0('V:\\Staff\\JXG4303\\CHARS\\results\\CHA
 lb <- read.csv('V:/Staff/JXG4303/CHARS/CCS_HCUP/CCS_ICD9/Single_Level_CCS_2015/dxlabel 2015.csv', skip=4, header=F, stringsAsFactors = F)
 names(lb) <- c('category', 'label')
 lb$label2 <- lb$label
-lb$label2[lb$category %in% 177:196] <- 'Pregnancy, childbirth'
+lb$label2[lb$category %in% 176:196] <- 'Pregnancy, childbirth'
 lb$label2[lb$category %in% 218:224] <- 'Newborns, neonates'
 lb$label3 <- lb$label2
 lb$label3[lb$category %in% 49:50] <- 'Diabetes'
 lb$category2 <- lb$category
-lb$category2[lb$category %in% 177:196] <- '177-196'
+lb$category2[lb$category %in% 176:196] <- '176-196'
 lb$category2[lb$category %in% 218:224] <- '218-224'
 
 lb_meps <- xlsx::read.xlsx('V:/Staff/JXG4303/CHARS/CCS_HCUP/CCS_grouping_MEPS_AHRQ_2007.xlsx', sheetIndex = 1, stringsAsFactors=FALSE)
@@ -102,20 +104,20 @@ type <- c('hospitalization', 'observation', 'both')
 #state  
 for (i in 1:length(year)) {
   
-  for (j in 1:length(type)) {
-    
-    if (type[j]=='hospitalization') {dat <- read.csv(paste0('V:/Staff/JXG4303/CHARS/results/CHARS_', ccs_version[i], 'CCS_', year[i], '_hospitalization.csv'), stringsAsFactors=F)}
-    if (type[j]=='observation') {dat <- read.csv(paste0('V:/Staff/JXG4303/CHARS/results/CHARS_', ccs_version[i], 'CCS_', year[i], '_observation.csv'), stringsAsFactors=F)}
-    if (type[j]=='both') {
-      dat1 <- read.csv(paste0('V:/Staff/JXG4303/CHARS/results/CHARS_', ccs_version[i], 'CCS_', year[i], '_hospitalization.csv'), stringsAsFactors=F)
-      dat2 <- read.csv(paste0('V:/Staff/JXG4303/CHARS/results/CHARS_', ccs_version[i], 'CCS_', year[i], '_observation.csv'), stringsAsFactors=F)
-      dat <- rbind(dat1, dat2)
-    }
+    dat1 <- read.csv(paste0('V:/Staff/JXG4303/CHARS/results/CHARS_', ccs_version[i], 'CCS_', year[i], '_hospitalization.csv'), stringsAsFactors=F)
+    dat1$type <- 1
+    dat2 <- read.csv(paste0('V:/Staff/JXG4303/CHARS/results/CHARS_', ccs_version[i], 'CCS_', year[i], '_observation.csv'), stringsAsFactors=F)
+    dat2$type <- 2
+    dat <- rbind(dat1, dat2)
     dat <- filter(dat, STATERES=='WA')   #WA residents only
     
     ############CCS comb_preg_newborn_diabetes#####################################################
     res <- matrix(NA, dim(lb)[1], 4, dimnames=list(c(lb$label), c('category','Primary_diagnosis', 'First_nine_diagnoses', 'All_25_diagnoses')))
+    res.h <- matrix(NA, dim(lb)[1], 4, dimnames=list(c(lb$label), c('category','Primary_diagnosis', 'First_nine_diagnoses', 'All_25_diagnoses')))
+    res.o <- matrix(NA, dim(lb)[1], 4, dimnames=list(c(lb$label), c('category','Primary_diagnosis', 'First_nine_diagnoses', 'All_25_diagnoses')))
     res[,1] <- lb$category
+    res.h[,1] <- lb$category
+    res.o[,1] <- lb$category
     
     for (k in 1:dim(lb)[1]) {
       ct <- matrix(NA, dim(dat)[1], 25)
@@ -127,32 +129,54 @@ for (i in 1:length(year)) {
       tmp9 <- apply(ct[, 1:9], 1, function(x) sum(x, na.rm=T))
       res[k, 3] <- sum(tmp9>0)
       res[k, 2] <- sum(ct[,1], na.rm=T)
+      
+      tmp25h <- apply(ct[dat$type==1,], 1, function(x) sum(x, na.rm=T))
+      res.h[k, 4] <- sum(tmp25h>0)
+      tmp9h <- apply(ct[dat$type==1, 1:9], 1, function(x) sum(x, na.rm=T))
+      res.h[k, 3] <- sum(tmp9h>0)
+      res.h[k, 2] <- sum(ct[dat$type==1, 1], na.rm=T)
+      
+      tmp25o <- apply(ct[dat$type==2,], 1, function(x) sum(x, na.rm=T))
+      res.o[k, 4] <- sum(tmp25o>0)
+      tmp9o <- apply(ct[dat$type==2, 1:9], 1, function(x) sum(x, na.rm=T))
+      res.o[k, 3] <- sum(tmp9o>0)
+      res.o[k, 2] <- sum(ct[dat$type==2,1], na.rm=T)
     }
     
-    xlsx::write.xlsx(res, file=paste0('V:/Staff/JXG4303/CHARS/results/reports/All WA residents only/causes_hospitalization_', year[i], '-', 
-                                      type[j],'.xlsx'), row.names=T, sheetName = 'ccs_original')
 
-    res1 <- data.frame(res)
-    res1$label <- rownames(res)
-    res1$label2 <- res1$label
-    res1$label2[res1$category %in% 177:196] <- 'Pregnancy, childbirth'
-    res1$label2[res1$category %in% 218:224] <- 'Newborns, neonates'
-    res.final <- data.frame(res1 %>% group_by (label2) %>% summarize(Primary_diagnosis=sum(Primary_diagnosis),
-                                                                     First_nine_diagnoses=sum(First_nine_diagnoses),
-                                                                     All_25_diagnoses=sum(All_25_diagnoses)))
-    xlsx::write.xlsx(res.final, file=paste0('V:/Staff/JXG4303/CHARS/results/reports/All WA residents only/causes_hospitalization_', year[i], '-', 
-                                            type[j],'.xlsx'), row.names=F, sheetName = 'ccs_comb_preg_newborn', append=T)
-    
-    res1$label3 <- res1$label2
-    res1$label3[res1$category %in% 49:50] <- 'Diabetes'
-    res.final2 <- data.frame(res1 %>% group_by (label3) %>% summarize(Primary_diagnosis=sum(Primary_diagnosis),
-                                                                      First_nine_diagnoses=sum(First_nine_diagnoses),
-                                                                      All_25_diagnoses=sum(All_25_diagnoses)))
-    xlsx::write.xlsx(res.final2, file=paste0('V:/Staff/JXG4303/CHARS/results/reports/All WA residents only/causes_hospitalization_', year[i], '-', 
-                                             type[j],'.xlsx'), row.names=F, sheetName = 'ccs_comb_preg_newborn_diabetes', append=T)
-    
+    for (j in 1:length(type)) {
+      
+      if (type[j]=='both') {res.tmp=res}
+      if (type[j]=='hospitalization') {res.tmp=res.h}
+      if (type[j]=='observation') {res.tmp=res.o}
+      xlsx::write.xlsx(res.tmp, file=paste0('V:/Staff/JXG4303/CHARS/results/reports/All WA residents only/causes_hospitalization_', year[i], '-',
+                                            type[j], '.xlsx'), row.names=T, sheetName = 'ccs_original')
+
+      res1 <- data.frame(res.tmp)
+      res1$label <- rownames(res.tmp)
+      res1$label2 <- res1$label
+      res1$label2[res1$category %in% 176:196] <- 'Pregnancy, childbirth'
+      res1$label2[res1$category %in% 218:224] <- 'Newborns, neonates'
+      res.final <- data.frame(res1 %>% group_by (label2) %>% summarize(Primary_diagnosis=sum(Primary_diagnosis),
+                                                                       First_nine_diagnoses=sum(First_nine_diagnoses),
+                                                                       All_25_diagnoses=sum(All_25_diagnoses)))
+      xlsx::write.xlsx(res.final, file=paste0('V:/Staff/JXG4303/CHARS/results/reports/All WA residents only/causes_hospitalization_', year[i], '-', 
+                                              type[j],'.xlsx'), row.names=F, sheetName = 'ccs_comb_preg_newborn', append=T)
+      
+      res1$label3 <- res1$label2
+      res1$label3[res1$category %in% 49:50] <- 'Diabetes'
+      res.final2 <- data.frame(res1 %>% group_by (label3) %>% summarize(Primary_diagnosis=sum(Primary_diagnosis),
+                                                                        First_nine_diagnoses=sum(First_nine_diagnoses),
+                                                                        All_25_diagnoses=sum(All_25_diagnoses)))
+      xlsx::write.xlsx(res.final2, file=paste0('V:/Staff/JXG4303/CHARS/results/reports/All WA residents only/causes_hospitalization_', year[i], '-', 
+                                               type[j],'.xlsx'), row.names=F, sheetName = 'ccs_comb_preg_newborn_diabetes', append=T)
+    }
+
     ###########MEPS-CCS#######################################################################
     res <- matrix(NA, dim(lb_meps)[1], 3, dimnames=list(c(lb_meps$Condition.Category), c('Primary_diagnosis', 'First_nine_diagnoses', 'All_25_diagnoses')))
+    res.h <- matrix(NA, dim(lb_meps)[1], 3, dimnames=list(c(lb_meps$Condition.Category), c('Primary_diagnosis', 'First_nine_diagnoses', 'All_25_diagnoses')))
+    res.o <- matrix(NA, dim(lb_meps)[1], 3, dimnames=list(c(lb_meps$Condition.Category), c('Primary_diagnosis', 'First_nine_diagnoses', 'All_25_diagnoses')))
+
     for (k in 1:dim(lb_meps)[1]) {
       cause <- paste0('c(', noquote(lb_meps$v1[k]),')')
       ct <- matrix(NA, dim(dat)[1], 25)
@@ -164,10 +188,23 @@ for (i in 1:length(year)) {
       tmp9 <- apply(ct[, 1:9], 1, function(x) sum(x, na.rm=T))
       res[k, 2] <- sum(tmp9>0)
       res[k, 1] <- sum(ct[,1], na.rm=T)
+      
+      tmp25h <- apply(ct[dat$type==1,], 1, function(x) sum(x, na.rm=T))
+      res.h[k, 3] <- sum(tmp25h>0)
+      tmp9h <- apply(ct[dat$type==1, 1:9], 1, function(x) sum(x, na.rm=T))
+      res.h[k, 2] <- sum(tmp9h>0)
+      res.h[k, 1] <- sum(ct[dat$type==1, 1], na.rm=T)
+      
+      tmp25o <- apply(ct[dat$type==2,], 1, function(x) sum(x, na.rm=T))
+      res.o[k, 3] <- sum(tmp25o>0)
+      tmp9o <- apply(ct[dat$type==2, 1:9], 1, function(x) sum(x, na.rm=T))
+      res.o[k, 2] <- sum(tmp9o>0)
+      res.o[k, 1] <- sum(ct[dat$type==2,1], na.rm=T)
     }
-    xlsx::write.xlsx(res, file=paste0('V:/Staff/JXG4303/CHARS/results/reports/All WA residents only/causes_hospitalization_', year[i], '-', 
-                                      type[j],'.xlsx'), row.names=T, sheetName = 'MEPS_ccs', append=T)
-  }
+    xlsx::write.xlsx(res, file=paste0('V:/Staff/JXG4303/CHARS/results/reports/All WA residents only/causes_hospitalization_', year[i], '-both.xlsx'), row.names=T, sheetName = 'MEPS_ccs', append=T)
+    xlsx::write.xlsx(res.h, file=paste0('V:/Staff/JXG4303/CHARS/results/reports/All WA residents only/causes_hospitalization_', year[i], '-hospitalization.xlsx'), row.names=T, sheetName = 'MEPS_ccs', append=T)
+    xlsx::write.xlsx(res.o, file=paste0('V:/Staff/JXG4303/CHARS/results/reports/All WA residents only/causes_hospitalization_', year[i], '-observation.xlsx'), row.names=T, sheetName = 'MEPS_ccs', append=T)
+    
 }
 
 
@@ -225,7 +262,7 @@ for (i in 1:length(year)) {
         res1 <- data.frame(res)
         res1$label <- rownames(res)
         res1$label2 <- res1$label
-        res1$label2[res1$category %in% 177:196] <- 'Pregnancy, childbirth'
+        res1$label2[res1$category %in% 176:196] <- 'Pregnancy, childbirth'
         res1$label2[res1$category %in% 218:224] <- 'Newborns, neonates'
         res.final <- data.frame(res1 %>% group_by (label2) %>% summarize(Primary_diagnosis=sum(Primary_diagnosis),
                                                                          First_nine_diagnoses=sum(First_nine_diagnoses),
