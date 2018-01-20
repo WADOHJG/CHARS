@@ -16,6 +16,19 @@ Two types of ranking were provided: one is based on principal diagnosis that is 
 ## Hospital Stays
 The unit of analysis is the hospital discharge (i.e., the inpatient stay), not a person or patient. This means that a person who is admitted to the hospital multiple times in one year will be counted each time as a separate "discharge" from the hospital. Counts are summarized by discharge year. 
 
+## Clinical Classifications Software (CCS) Categories
+The Clinical Classifications Software (CCS) for ICD-9-CM [[link](https://www.hcup-us.ahrq.gov/toolssoftware/ccs/ccs.jsp)] and for ICD-10-CM [[link](https://www.hcup-us.ahrq.gov/toolssoftware/ccs10/ccs10.jsp)] categorizes ICD-9-CM and ICD-10-CM diagnosis codes into a manageable number of clinically meaningful categories to facilitate statistical analysis and reporting. CCS consists of two related classification systems, single-level and multi-level, which
+are designed to meet different needs. Single-level CCS that aggregates illnesses and conditions into 285 mutually exclusive categories is used in the report.  
+
+Maternal and neonatal stays are grouped by Multiple-level CCS  (Multi-CCS-level-1 11: 'Complications of pregnancy; childbirth; and the puerperium' and Multi-CCS-level-1 15: 'Certain conditions originating in the perinatal period').
+
+
+
+
+
+
+## Medical Expenditure Panel Survey (MEPS) Condition Categories
+
 ##comparability across years
 Every effort was made to translate the CCS system to ICD-10-CM/PCS without making changes to the CCS assignments for diseases and conditions. However, because of the structure and greater specificity of ICD-10-CM there are some ICD-9-CM conditions that do not map to the same CCS in ICD-10-CM. For example; ICD-9-CM code 721.8, Other allied disorders of spine, is assigned to CCS 205, Spondylosis; intervertebral disc disorders; other back problems. The GEMs map this ICD-9-CM code to two ICD-10-CM codes. 
 
@@ -23,6 +36,10 @@ M25.78, Osteophyte, vertebrae, assigned to CCS 212, Other bone disease and muscu
 M48.9, Spondylopathy, unspecified, assigned to CCS 205, Spondylosis; intervertebral disc disorders; other back problems
 
 Even though the code description for M48.9 is more specific than the ICD-9-CM code 721.8, the CCS assignment to CCS 205 was preserved. However, code M25.78 is much more specific than 721.8 and resulted in a different CCS assignment, CCS 212, because osteophyte did not fit into CCS 205. Therefore, when users of the system are comparing ICD-9-CM to ICD-10-CM, it is important to remember that one ICD-9-CM code may map to multiple ICD-10-CM codes, of which some may be closer matches to the ICD-9-CM code/description than others. 
+
+
+
+
 
 ## E code
 In ICD-10-CM, the E codes have moved to Chapter 20: External Causes of Morbidity (V01-Y99). The external cause codes are used essentially the same in ICD-10-CM as they are in ICD-9-CM, with a few modifications
