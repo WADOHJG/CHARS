@@ -16,53 +16,48 @@ Two types of ranking were provided: one is based on principal diagnosis that is 
 ## Hospital Stays
 The unit of analysis is the hospital discharge (i.e., the inpatient stay), not a person or patient. This means that a person who is admitted to the hospital multiple times in one year will be counted each time as a separate "discharge" from the hospital. Counts are summarized by discharge year. 
 
-## Clinical Classifications Software (CCS) Categories
-The Clinical Classifications Software (CCS) for ICD-9-CM [[link](https://www.hcup-us.ahrq.gov/toolssoftware/ccs/ccs.jsp)] and for ICD-10-CM [[link](https://www.hcup-us.ahrq.gov/toolssoftware/ccs10/ccs10.jsp)] categorizes ICD-9-CM and ICD-10-CM diagnosis codes into a manageable number of clinically meaningful categories to facilitate statistical analysis and reporting. CCS consists of two related classification systems, single-level and multi-level, which
-are designed to meet different needs. Single-level CCS that aggregates illnesses and conditions into 285 mutually exclusive categories is used in the report.  
+## Diagnosis/Condition Categorization
+Clinical Classification Software (CCS) and Medical Expenditure Panel Survey (MEPS) Condition Categories are used to categorize diagnoses in CHARS (Appendix).
 
-Maternal and neonatal stays are grouped by Multiple-level CCS  (Multi-CCS-level-1 11: 'Complications of pregnancy; childbirth; and the puerperium' and Multi-CCS-level-1 15: 'Certain conditions originating in the perinatal period').
+####  Clinical Classifications Software (CCS) Categories
+The Clinical Classifications Software (CCS) for ICD-9-CM [[link](https://www.hcup-us.ahrq.gov/toolssoftware/ccs/ccs.jsp)] and for ICD-10-CM [[link](https://www.hcup-us.ahrq.gov/toolssoftware/ccs10/ccs10.jsp)] categorizes ICD-9-CM and ICD-10-CM diagnosis codes into a manageable number of clinically meaningful categories to facilitate statistical analysis and reporting. The CCS for ICD-10-CM undergoes periodic updates and corrections as data using ICD-10 codes come into greater use. The Version 2018.1 of CCS ICD-10-CM is applied in the report. 
 
+CCS consists of two related classification systems, single-level and multi-level, which are designed to meet different needs. Single-level CCS that aggregates illnesses and conditions into 285 mutually exclusive categories is used in the report. We end up with 237 categories after performing the following steps:
 
+* Maternal and neonatal stays are grouped by Multiple-level CCS  (Multi-CCS-level-1 11: 'Complications of pregnancy; childbirth; and the puerperium' and Multi-CCS-level-1 15: 'Certain conditions originating in the perinatal period');
+* The category 259 'Residual codes; unclassified' was excluded;
+* The external causes of injury and poisoning (E-codes: E800-E999) for ICD-9-CM and the external causes of morbidity (V, W, X, Y codes: V01-Y99) are not listed in diagnosis conditions in CHARS and the single-level CCS categories 260 and 2601-2621 for external cuases codes are excluded.
 
+####  Medical Expenditure Panel Survey (MEPS) Condition Categories
+MEPS conditon categories group single-level CCS categories into 61 broader categories. This table [[link](http://www.meps.ahrq.gov/mepsweb/data_stats/conditions.shtml)] shows the CCS codes that make up each category.Decisions about collapsing CCS categories were based on maintaining the clinical significance of categories, the ability of MEPS respondents to report the condition accurately, and the frequency of reporting the condition. The category 'Residual codes' (the corresponding CCS cateogry 259 'Residual codes; unclassified') was excluded in the report.
 
+## Caution: Transition from ICD-9-CM to ICD-10-CM/PCS Coding in 2015
+On October 1, 2015, the United States transitioned from ICD-9-CM to ICD-10-CM, resulting in the 2014 CHARS data with ICD-9-CM codes, the 2015 CHARS data with both ICD-9-CM (the first three quarters) and ICD-10-CM (the last quarter) codes, and the 2016 CHARS data with ICD-10-CM codes. Every effort was made by AHRQ-HCUP to translate the CCS system to ICD-10-CM without making changes to the CCS assignments for diseases and conditions. However, because of the structure and greater specificity of ICD-10-CM there are some ICD-9-CM conditions that do not map to the same CCS in ICD-10-CM. Thus, it should be cautious when you compare the annual data in the report (use the CCS to ICD-9-CM [[link](https://www.hcup-us.ahrq.gov/toolssoftware/ccs/ccs.jsp)] /ICD-10-CM [[link](https://www.hcup-us.ahrq.gov/toolssoftware/ccs10/ccs10.jsp)] crosswalk as reference). 
 
+## Table of The Files Received from DOH
 
-## Medical Expenditure Panel Survey (MEPS) Condition Categories
-
-##comparability across years
-Every effort was made to translate the CCS system to ICD-10-CM/PCS without making changes to the CCS assignments for diseases and conditions. However, because of the structure and greater specificity of ICD-10-CM there are some ICD-9-CM conditions that do not map to the same CCS in ICD-10-CM. For example; ICD-9-CM code 721.8, Other allied disorders of spine, is assigned to CCS 205, Spondylosis; intervertebral disc disorders; other back problems. The GEMs map this ICD-9-CM code to two ICD-10-CM codes. 
-
-M25.78, Osteophyte, vertebrae, assigned to CCS 212, Other bone disease and musculoskeletal deformities
-M48.9, Spondylopathy, unspecified, assigned to CCS 205, Spondylosis; intervertebral disc disorders; other back problems
-
-Even though the code description for M48.9 is more specific than the ICD-9-CM code 721.8, the CCS assignment to CCS 205 was preserved. However, code M25.78 is much more specific than 721.8 and resulted in a different CCS assignment, CCS 212, because osteophyte did not fit into CCS 205. Therefore, when users of the system are comparing ICD-9-CM to ICD-10-CM, it is important to remember that one ICD-9-CM code may map to multiple ICD-10-CM codes, of which some may be closer matches to the ICD-9-CM code/description than others. 
-
-
-
-
-
-## E code
-In ICD-10-CM, the E codes have moved to Chapter 20: External Causes of Morbidity (V01-Y99). The external cause codes are used essentially the same in ICD-10-CM as they are in ICD-9-CM, with a few modifications
-No external cause code from ICD-10-CM Chapter 20 is needed if the external cause and intent are included in a code from another chapter, such as T42.3X1A, Poisoning by barbituates, accidental, intentional, initial encounter. This is a new guideline for ICD-10-CM.
-
-ICD9: Supplemental Classification of External Causes of Injury and Poisoning (E-codes, E800-E999),     E code can never be a principal diagnosis
-ICD10: Chapter 20: External Causes of Morbidity (V00-Y99) The external causes of morbidity, codes should never be sequenced as the first-listed or principal diagnosis.
+| File Name (xlsx file) | Description|
+| --------------------- | ------------------------------------------------ |
+|hospitalization_<ACH name>_Primary_diagnosis_ccs_comb | CCS-based ranking of primary diagnosis of Hospital Stays (ACH and county level) |
+|hospitalization_<ACH name>_Primary_diagnosis_MEPS | MEPS-based ranking of primary diagnosis of Hospital Stays (ACH and county level) |
+|hospitalization_<ACH name>_All_25_diagnoses_ccs_comb | CCS-based ranking of all 25 diagnoses of Hospital Stays (ACH and county level) |
+|hospitalization_<ACH name>_All_25_diagnoses_MEPS | MEPS-based ranking of all 25 diagnoses of Hospital Stays (ACH and county level) |
 
 
+## Appendix
 
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+**Table: Category Labels for CCS and MEPS**
+```{r, echo=FALSE}
+lb <- read.csv('V:/Staff/JXG4303/CHARS/CCS_HCUP/CCS_ICD9/Single_Level_CCS_2015/dxlabel 2015.csv', skip=4, header=F, stringsAsFactors = F)
+names(lb) <- c('CCS_category', 'CCS_label')
+lb_meps <- xlsx::read.xlsx('V:/Staff/JXG4303/CHARS/CCS_HCUP/CCS_grouping_MEPS_AHRQ_2007.xlsx', sheetIndex = 1, stringsAsFactors=FALSE)
+lb_meps$v1 <- sub(' - ', ':', lb_meps$CCS.Codes)
+lb$MEPS_label <- NA
+for (i in 1:dim(lb_meps)[1]) {
+  lb$MEPS_label[lb$CCS_category %in% eval(parse(text=paste0('c(', noquote(lb_meps$v1[i]),')')))] <- lb_meps$Condition.Category[i]
+}
+lb$MEPS_label[is.na(lb$MEPS_label)==1] <- 'External causes of injury and poisoning'
+knitr::kable(lb, align='l')
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
