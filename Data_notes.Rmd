@@ -38,10 +38,10 @@ On October 1, 2015, the United States transitioned from ICD-9-CM to ICD-10-CM, r
 
 | File Name (xlsx file)      | Description|
 | -------------------------- | ------------------------------------------------ |
-|hospitalization_*ACH*_Primary_diagnosis_ccs_comb | CCS-based ranking of primary diagnosis of Hospital Stays (ACH and county level) |
-|hospitalization_*ACH*_Primary_diagnosis_MEPS | MEPS-based ranking of primary diagnosis of Hospital Stays (ACH and county level) |
-|hospitalization_*ACH*_All_25_diagnoses_ccs_comb | CCS-based ranking of all 25 diagnoses of Hospital Stays (ACH and county level) |
-|hospitalization_*ACH*_All_25_diagnoses_MEPS | MEPS-based ranking of all 25 diagnoses of Hospital Stays (ACH and county level) |
+|hospitalization_*ACH*_Primary_diagnosis_ccs_comb | CCS-based ranking of primary diagnosis of hospital stays (ACH and county level) |
+|hospitalization_*ACH*_Primary_diagnosis_MEPS | MEPS-based ranking of primary diagnosis of hospital stays (ACH and county level) |
+|hospitalization_*ACH*_All_25_diagnoses_ccs_comb | CCS-based ranking of all 25 diagnoses of hospital stays (ACH and county level) |
+|hospitalization_*ACH*_All_25_diagnoses_MEPS | MEPS-based ranking of all 25 diagnoses of hospital stays (ACH and county level) |
 
 
 ## Appendix
