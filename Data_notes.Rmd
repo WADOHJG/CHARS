@@ -1,5 +1,5 @@
 ---
-title: "Data notes for diagnoses for hospital stays, 2014 to 2016"
+title: "Data notes -- Diagnoses for Hospital Stays, 2014 to 2016"
 output: word_document
 ---
 
@@ -26,10 +26,10 @@ CCS consists of two related classification systems, single-level and multi-level
 
 * Maternal and neonatal stays are grouped by Multiple-level CCS  (Multi-CCS-level-1 11: 'Complications of pregnancy; childbirth; and the puerperium' and Multi-CCS-level-1 15: 'Certain conditions originating in the perinatal period');
 * The category 259 'Residual codes; unclassified' was excluded;
-* The external causes of injury and poisoning (E-codes: E800-E999) for ICD-9-CM and the external causes of morbidity (V, W, X, Y codes: V01-Y99) are not listed in diagnosis conditions in CHARS and the single-level CCS categories 260 and 2601-2621 for external cuases codes are excluded.
+* The external causes of injury and poisoning (E-codes: E800-E999) for ICD-9-CM and the external causes of morbidity (V, W, X, Y codes: V01-Y99) are not listed in diagnosis conditions in CHARS and the single-level CCS categories 260 and 2601-2621 for external causes codes are excluded.
 
 ####  Medical Expenditure Panel Survey (MEPS) Condition Categories
-MEPS conditon categories group single-level CCS categories into 61 broader categories. This table [[link](http://www.meps.ahrq.gov/mepsweb/data_stats/conditions.shtml)] shows the CCS codes that make up each category.Decisions about collapsing CCS categories were based on maintaining the clinical significance of categories, the ability of MEPS respondents to report the condition accurately, and the frequency of reporting the condition. The category 'Residual codes' (the corresponding CCS cateogry 259 'Residual codes; unclassified') was excluded in the report.
+MEPS condition categories group single-level CCS categories into 61 broader categories. This table [[link](http://www.meps.ahrq.gov/mepsweb/data_stats/conditions.shtml)] shows the CCS codes that make up each category. Decisions about collapsing CCS categories were based on maintaining the clinical significance of categories, the ability of MEPS respondents to report the condition accurately, and the frequency of reporting the condition. The category 'Residual codes' (the corresponding CCS category 259 'Residual codes; unclassified') was excluded in the report.
 
 ## Caution: Transition from ICD-9-CM to ICD-10-CM/PCS Coding in 2015
 On October 1, 2015, the United States transitioned from ICD-9-CM to ICD-10-CM, resulting in the 2014 CHARS data with ICD-9-CM codes, the 2015 CHARS data with both ICD-9-CM (the first three quarters) and ICD-10-CM (the last quarter) codes, and the 2016 CHARS data with ICD-10-CM codes. Every effort was made by AHRQ-HCUP to translate the CCS system to ICD-10-CM without making changes to the CCS assignments for diseases and conditions. However, because of the structure and greater specificity of ICD-10-CM there are some ICD-9-CM conditions that do not map to the same CCS in ICD-10-CM. Thus, it should be cautious when you compare the annual data in the report (use the CCS to ICD-9-CM [[link](https://www.hcup-us.ahrq.gov/toolssoftware/ccs/ccs.jsp)] /ICD-10-CM [[link](https://www.hcup-us.ahrq.gov/toolssoftware/ccs10/ccs10.jsp)] crosswalk as reference). 
